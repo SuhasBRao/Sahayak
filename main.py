@@ -1,4 +1,3 @@
-from calendar import month
 import pyttsx3
 from datetime import datetime 
 import speech_recognition as sr
@@ -77,33 +76,32 @@ if __name__ == "__main__":
 
             text = text.replace('sahayak', "")
             
+            # list of keys to check in text
             key_words_list = ["today's date", 'thankyou']
             
+            # create a list to map the True values for keys in 
+            # above list
             
             res = list(map(lambda x: x in text, key_words_list))
             
+            # get the index where the value is True
+            res = [i for i,val in enumerate(res) if val]
+            
+            # find the key to respond
+            key = key_words_list[res[0]]
+            
             print(res)
+            print(key)
+            
             # {'hello sahayak': speak('Hello master, how can i help you'),
-            # func = {"today's date": getdate,
-            #  ("thank you", 'thankyou'): thank_you_response,
-            #  'current time': getTime}
+            {"today's date": getdate,
+             ("thank you", 'thankyou'): thank_you_response,
+             'current time': getTime}[key]()
             
             # func
              
-            
-            
-            
-        # else:
-            # if 'hello sahayak' in text:
-            #     speak('Hey master, how can i help you ?')
-                
-            # if "today's date" in text:
-            #     pass
-            # if 'current time' in text:
-            #     pass
-                
-            # if 'thank you' in text or 'thankyou' in text:
-            #     pass
+       
+       
     print('no audio')
 
 # } Driver Code ends
