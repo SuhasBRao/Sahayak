@@ -1,6 +1,5 @@
 # Use ctrl + shift + i for auto alignment on ubuntu
 
-from re import search
 import pyttsx3
 from datetime import datetime
 import speech_recognition as sr
@@ -130,8 +129,6 @@ if __name__ == "__main__":
         main()
     except Exception as e:
         speak(f'Sahayak crashed due to {e}')
-        # speak('Restarting give me a moment')
-        # main()
         
 
 
