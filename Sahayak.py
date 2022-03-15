@@ -1,9 +1,14 @@
 # Use ctrl + shift + i for auto alignment on ubuntu
+# https://vitux.com/test-your-internet-speed-through-ubuntu-command-line/
+# above link shows how to test internet speed using ubuntu terminal
+# Speed test function in this script works only after installing
+# the functionality shown in the above link
 
 import pyttsx3
 from datetime import datetime
 import speech_recognition as sr
 import wikipedia
+import subprocess
 
 r = sr.Recognizer()
 
@@ -11,7 +16,7 @@ engine = pyttsx3.init()
 
 
 def speak(text):
-    engine.setProperty('rate', 180)
+    engine.setProperty('rate', 170)
     engine.say(text)
     engine.runAndWait()
 
@@ -75,7 +80,23 @@ def searchWIKI():
     speak(wikipedia.summary(query,
                             sentences=3))
 
-
+def speedtest():
+    speak('Testing the internet Speed, This will take long Please wait')
+    # below line converts the output from bytes to string format
+    ret_Val = subprocess.run('speedtest-cli', capture_output= True)
+    print(ret_Val)
+    string = str(ret_Val.stdout)
+    download_speed_data = string.partition('Download:')[2].split()
+    download_speed = download_speed_data[0]
+    
+    upload_speed_data = string.partition('Upload:')[2].split()
+    upload_speed = upload_speed_data[0]
+    
+    speak(f'Download speed is {download_speed} Mega bits per second')
+    speak(f'Upload speed is {upload_speed} Mega bits per second')
+    
+    
+    
 def main():
     global text
     while(1):
@@ -84,14 +105,14 @@ def main():
 
         if text == 0 or text == None:
             continue
-        
+
         else:
 
             # text = text.replace('sahayak', "")
-            
+
             # list of keys to check in text
             key_words_list = ["today's date", 'thank you', 'current time',
-                              'what','search', 'thankyou']
+                              'what', 'search', 'thankyou', 'internet speed', 'net speed']
 
             # create a list to map the True values for keys in
             # above list
@@ -112,8 +133,10 @@ def main():
              "thankyou": thank_you_response,
              "thank you": thank_you_response,
              'current time': getTime,
-             'search':searchWIKI,
-             'what':searchWIKI
+             'search': searchWIKI,
+             'what': searchWIKI,
+             'net speed': speedtest,
+             'internet speed': speedtest
              }[key]()
 
 
@@ -121,7 +144,7 @@ def main():
 # Driver Code starts
 if __name__ == "__main__":
     # write your code here
-    
+
     # speak('Hi, How may i help you?')
     speak('Sahayak is listening')
     # allows the program to run
@@ -129,8 +152,6 @@ if __name__ == "__main__":
         main()
     except Exception as e:
         speak(f'Sahayak crashed due to {e}')
-        
-
 
 
 # } Driver Code ends
