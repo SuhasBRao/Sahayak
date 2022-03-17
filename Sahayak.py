@@ -4,11 +4,14 @@
 # Speed test function in this script works only after installing
 # the functionality shown in the above link
 
-import pyttsx3
+# import pyttsx3
 from datetime import datetime
 import speech_recognition as sr
 import wikipedia
 import subprocess
+import gtts
+import playsound
+import os
 
 r = sr.Recognizer()
 
@@ -16,9 +19,10 @@ engine = pyttsx3.init()
 
 
 def speak(text):
-    engine.setProperty('rate', 170)
-    engine.say(text)
-    engine.runAndWait()
+    tts = gtts.gTTS(text, lang = 'en')
+    tts.save('audio.mp3')
+    playsound.playsound('audio.mp3')
+    os.remove('audio.mp3')
 
 
 def listen():
@@ -27,10 +31,10 @@ def listen():
         # audio_data = r.record(source, duration=5)
 
         r.adjust_for_ambient_noise(source, duration=0.2)
-
+        r.energy_threshold = 100
         try:
             print('listening.......')
-            audio_data = r.listen(source, timeout=10)
+            audio_data = r.listen(source, phrase_time_limit=10 ,timeout=5)
             print("Recognizing...")
             text = r.recognize_google(audio_data, language='en-IN')
             return text.lower()
